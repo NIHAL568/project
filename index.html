@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detection</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('sylwia-bartyzel-l5ssAeasluw-unsplash.jpg'); /* Local image in the same folder */
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #start-detection {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #start-detection:hover {
+            background-color: #ff3b2f;
+        }
+
+        #emotion-result {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        #video-stream {
+            border: 5px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WELCOME TO VIRTUAL TRIAL ROOM</h1>
+        <button id="start-detection">Start Detection</button>
+        <p id="emotion-result"></p>
+        <br>
+        <img id="video-stream" src="{{ url_for('video_feed') }}" width="640" height="480" alt="Video Stream">
+    </div>
+
+    <script>
+        document.getElementById("start-detection").addEventListener("click", function() {
+            fetch("/capture", { method: "POST" })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("emotion-result").innerText = "Detected Emotion: " + data.emotion;
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
